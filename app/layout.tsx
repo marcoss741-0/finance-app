@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import "./globals.css";
+import { Toaster } from "./_components/ui/sonner";
 
 export const metadata: Metadata = {
   title: "Fiannce AI",
@@ -14,7 +15,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-br">
-      <body className={`dark antialiased`}>{children}</body>
+      <body className={`dark antialiased`}>
+        {children}
+        <Toaster />
+      </body>
     </html>
   );
 }

@@ -1,7 +1,41 @@
+"use client";
+
 import Image from "next/image";
 import { Button } from "../_components/ui/button";
+import { LogInIcon } from "lucide-react";
+import { authClient } from "../_lib/auth-client";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../_components/ui/dialog";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "../_components/ui/tabs";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "../_components/ui/card";
+import LoginForm from "./_components/login-form";
+import RegisterForm from "./_components/register-form";
 
 const LoginPage = () => {
+  const handleSignInGoogle = async () => {
+    await authClient.signIn.social({
+      provider: "google",
+      callbackURL: "/",
+    });
+  };
+
   return (
     <div className="grid h-full grid-cols-2 justify-center p-5">
       <div className="mx-auto flex max-w-[488px] flex-col items-center justify-center gap-8 p-8">
@@ -13,18 +47,79 @@ const LoginPage = () => {
             para monitorar suas movimentações, e oferecer insights
             personalizados, facilitando o controle do seu orçamento.
           </p>
-          <Button
-            className="w-full gap-2 p-2 text-[14px] font-medium"
-            variant="outline"
-          >
-            <Image
-              src="/google.svg"
-              width={18}
-              height={18}
-              alt="Login with google"
-            />
-            Entrar como o Google
-          </Button>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button
+                className="w-full gap-2 p-2 text-[14px] font-medium"
+                variant="outline"
+              >
+                <LogInIcon />
+                Fazer Login
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle className="uppercase">Fazer Login</DialogTitle>
+                <DialogDescription>
+                  Faça login ou cadastre-se para ter acesso a nossa plataforma
+                </DialogDescription>
+              </DialogHeader>
+              <Tabs defaultValue="signup" className="w-full">
+                <TabsList className="grid w-full grid-cols-2">
+                  <TabsTrigger value="signup">Entrar</TabsTrigger>
+                  <TabsTrigger value="signin">Cadastrar</TabsTrigger>
+                </TabsList>
+                <TabsContent value="signup">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Fazer Login</CardTitle>
+                      <CardDescription>
+                        Faça login na plataforma com seu e-mail e senha.
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-2">
+                      <LoginForm />
+
+                      <div className="relative my-4">
+                        <div className="absolute inset-0 flex items-center">
+                          <span className="w-full border-t" />
+                        </div>
+                        <div className="relative flex justify-center text-xs uppercase">
+                          <span className="bg-background px-2 text-muted-foreground">
+                            Ou continue com
+                          </span>
+                        </div>
+                      </div>
+                      <Button
+                        className="w-full gap-2 p-2 text-[14px] font-medium"
+                        variant="outline"
+                        onClick={handleSignInGoogle}
+                      >
+                        <Image
+                          src="/google.svg"
+                          width={18}
+                          height={18}
+                          alt="Login with google"
+                        />
+                        Entrar com o Google
+                      </Button>
+                    </CardContent>
+                  </Card>
+                </TabsContent>
+                <TabsContent value="signin">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Cadastre-se</CardTitle>
+                      <CardDescription>Insira suas credenciais</CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-2">
+                      <RegisterForm />
+                    </CardContent>
+                  </Card>
+                </TabsContent>
+              </Tabs>
+            </DialogContent>
+          </Dialog>
         </div>
       </div>
       <div className="relative h-full w-full">
