@@ -1,0 +1,21 @@
+<svg width="64" height="64" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="gradBody" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="forestgreen" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="forestgreen" stop-opacity="1"/>
+    </linearGradient>
+    <linearGradient id="gradHead" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#333" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#333" stop-opacity="1"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Corpo com gradiente verde -->
+  <path d="M2 22c0-5.5 4.5-10 10-10s10 4.5 10 10H2z" fill="url(#gradBody)" />
+
+  <!-- Cabeça com gradiente escuro -->
+  <circle cx="12" cy="8" r="4" fill="url(#gradHead)" />
+
+  <!-- Sombra do usuário -->
+  <ellipse cx="12" cy="22" rx="6" ry="1" fill="#000" opacity="0.1"/>
+</svg>

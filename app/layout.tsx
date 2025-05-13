@@ -4,7 +4,7 @@ import "./globals.css";
 import { Toaster } from "./_components/ui/sonner";
 
 export const metadata: Metadata = {
-  title: "Fiannce AI",
+  title: "Finance AI-APP",
   description: "Manage your finance with AI",
 };
 

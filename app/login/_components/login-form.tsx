@@ -17,9 +17,11 @@ import { authClient } from "@/app/_lib/auth-client";
 import { toast } from "sonner";
 import { useState } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 const LoginForm = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
   const formSchema = z.object({
     email: z
@@ -58,6 +60,7 @@ const LoginForm = () => {
       {
         onSuccess: () => {
           toast.success("Login Realizado!");
+          router.replace("/");
           setIsLoading(false);
         },
         onError: (ctx) => {
