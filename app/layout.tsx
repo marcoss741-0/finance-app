@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 };
 
 const mulish = Mulish({
-  subsets: ["latin"],
+  subsets: ["latin-ext"],
 });
 
 export default function RootLayout({
