@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Mulish } from "next/font/google";
 
 import "./globals.css";
 import { Toaster } from "./_components/ui/sonner";
@@ -8,6 +9,10 @@ export const metadata: Metadata = {
   description: "Manage your finance with AI",
 };
 
+const mulish = Mulish({
+  subsets: ["latin"],
+});
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -15,7 +20,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-br">
-      <body className={`dark antialiased`}>
+      <body className={`dark antialiased ${mulish.className}`}>
         {children}
         <Toaster />
       </body>

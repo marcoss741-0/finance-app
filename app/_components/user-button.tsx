@@ -18,12 +18,23 @@ import {
 } from "./ui/dropdown-menu";
 import { authClient } from "../_lib/auth-client";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "./ui/dialog";
 
 interface UserButtonProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   session: any;
 }
 
 const UserButton = ({ session }: UserButtonProps) => {
+  const [DialogOpen, setDialogIsOpen] = useState(false);
   const router = useRouter();
 
   const handleSignout = async () => {
@@ -34,6 +45,10 @@ const UserButton = ({ session }: UserButtonProps) => {
         },
       },
     });
+  };
+
+  const handleDialogOpen = () => {
+    setDialogIsOpen((prev) => !prev);
   };
 
   return (
@@ -82,9 +97,9 @@ const UserButton = ({ session }: UserButtonProps) => {
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={handleDialogOpen}>
               <UserCircleIcon />
-              Conta
+              Gerenciar Conta
             </DropdownMenuItem>
             <DropdownMenuItem>
               <CreditCardIcon />
@@ -102,6 +117,20 @@ const UserButton = ({ session }: UserButtonProps) => {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
+
+      {/* Dialog para gestão da conta */}
+      <Dialog open={DialogOpen} onOpenChange={setDialogIsOpen}>
+        <DialogTrigger asChild></DialogTrigger>
+        <DialogContent className="w-[50%] items-center">
+          <DialogHeader>
+            <DialogTitle>Informações da conta.</DialogTitle>
+            <DialogDescription>
+              Alterar Informações da Conta ou Excluir Conta
+            </DialogDescription>
+          </DialogHeader>
+          <div></div>
+        </DialogContent>
+      </Dialog>
     </>
   );
 };
