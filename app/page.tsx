@@ -15,23 +15,25 @@ export default async function Home() {
   }
 
   return (
-    <div className="fixed flex w-full items-center justify-between border-b px-8 py-4">
-      <div className="flex items-center gap-8">
-        <Image
-          src="/logo.svg"
-          alt="Logo da Aplicação"
-          width={174}
-          height={39}
-        />
-        <Link href="#">Dashboard</Link>
-        <Link href="#">Transações</Link>
-        <Link href="#">Assinaturas</Link>
-      </div>
+    <>
+      <div className="flex w-full items-center justify-between border-b px-8 py-4">
+        <div className="flex items-center gap-8">
+          <Image
+            src="/logo.svg"
+            alt="Logo da Aplicação"
+            width={174}
+            height={39}
+          />
+          <Link href="#">Dashboard</Link>
+          <Link href="/transactions">Transações</Link>
+          <Link href="#">Assinaturas</Link>
+        </div>
 
-      {/* User Button */}
-      <div className="flex">
-        <UserButton session={session} />
+        {/* User Button */}
+        <div className="flex">
+          <UserButton session={session} />
+        </div>
       </div>
-    </div>
+    </>
   );
 }

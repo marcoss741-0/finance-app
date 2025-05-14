@@ -27,6 +27,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "./ui/dialog";
+import Image from "next/image";
 
 interface UserButtonProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -35,13 +36,18 @@ interface UserButtonProps {
 
 const UserButton = ({ session }: UserButtonProps) => {
   const [DialogOpen, setDialogIsOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
   const handleSignout = async () => {
     await authClient.signOut({
       fetchOptions: {
         onSuccess: () => {
+          setIsLoading(false);
           router.push("/login");
+        },
+        onRequest: () => {
+          setIsLoading(true);
         },
       },
     });
@@ -55,14 +61,24 @@ const UserButton = ({ session }: UserButtonProps) => {
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <div className="flex cursor-pointer gap-4 rounded-lg border p-2">
-            <Avatar className="h-8 w-8 rounded-lg grayscale">
-              <AvatarImage
-                src={session.user.image || "user-icon-styled.svg"}
-                alt={session.user.name}
+          <div className="flex cursor-pointer gap-4 rounded-full border p-4">
+            {isLoading ? (
+              <Image
+                src="/loader2.svg"
+                alt="Loading Logout"
+                width={36}
+                height={36}
               />
-              <AvatarFallback className="rounded-lg">FA</AvatarFallback>
-            </Avatar>
+            ) : (
+              <Avatar className="h-8 w-8 rounded-lg">
+                <AvatarImage
+                  src={session.user.image || "icons8-user-48.png"}
+                  alt={session.user.name}
+                />
+                <AvatarFallback className="rounded-lg">FA</AvatarFallback>
+              </Avatar>
+            )}
+
             <div className="grid flex-1 text-left text-sm leading-tight">
               <span className="truncate font-medium">{session.user.name}</span>
               <span className="truncate text-xs text-muted-foreground">
@@ -80,10 +96,10 @@ const UserButton = ({ session }: UserButtonProps) => {
             <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
               <Avatar className="h-8 w-8 rounded-lg">
                 <AvatarImage
-                  src={session.user.image || "user-icon-styled.svg"}
+                  src={session.user.image || "icons8-user-48.png"}
                   alt={session.user.name}
                 />
-                <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                <AvatarFallback className="rounded-lg">FA</AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-medium">
