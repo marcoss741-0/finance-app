@@ -46,6 +46,8 @@ import {
 } from "../_constants/transactions";
 import { DatePicker } from "./date-picker";
 import { toast } from "sonner";
+import { useState } from "react";
+import { mutate } from "swr";
 
 const formSchema = z.object({
   name: z.string().trim().min(1, {
@@ -72,6 +74,8 @@ const formSchema = z.object({
 type FCHEMA = z.infer<typeof formSchema>;
 
 const AddTransactionsButton = () => {
+  const [dialogIsOpen, setDialoIsOpen] = useState(false);
+
   const form = useForm<FCHEMA>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -86,13 +90,15 @@ const AddTransactionsButton = () => {
 
   const onSubmit = async (data: FCHEMA) => {
     try {
-      const result = await fetch("/api/add-transaction", {
+      const result = await fetch("/api/transactions/add-transaction", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(data),
       });
+
+      mutate("/api/transactions");
       const response = await result.json();
 
       if (response.success === false) {
@@ -100,6 +106,8 @@ const AddTransactionsButton = () => {
       }
 
       toast.success(response.message || "");
+      form.reset();
+      setDialoIsOpen(false);
     } catch (error) {
       toast.error("Ooops, algo incomum aconteceu!!" + error);
     }
@@ -107,7 +115,9 @@ const AddTransactionsButton = () => {
   return (
     <>
       <Dialog
+        open={dialogIsOpen}
         onOpenChange={(open) => {
+          setDialoIsOpen(open);
           if (!open) form.reset();
         }}
       >

@@ -1,10 +1,8 @@
 import { headers } from "next/headers";
 import AddTransactionsButton from "../_components/add-transaction-button";
-import { DataTable } from "../_components/ui/data-table";
-import { prisma } from "../_lib/prisma";
-import { TransactionsColumns } from "./_columns";
 import { redirect } from "next/navigation";
 import { auth } from "../_lib/auth";
+import TransactionsTable from "../_components/transactions-table";
 
 const Transactions = async () => {
   const session = await auth.api.getSession({
@@ -14,7 +12,6 @@ const Transactions = async () => {
   if (!session) {
     redirect("/login");
   }
-  const transactions = await prisma.transaction.findMany({});
 
   return (
     <>
@@ -26,10 +23,11 @@ const Transactions = async () => {
             <AddTransactionsButton />
           </div>
         </div>
-        <DataTable
+        {/* <DataTable
           columns={TransactionsColumns}
           data={JSON.parse(JSON.stringify(transactions))}
-        />
+        /> */}
+        <TransactionsTable />
       </div>
     </>
   );
