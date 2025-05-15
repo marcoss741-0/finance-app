@@ -9,8 +9,8 @@ import {
 import { ColumnDef } from "@tanstack/react-table";
 import TransactionTypeBadge from "../_components/type-badge";
 import { formatCurrency, formatLocalDate } from "@/app/_helpers/format-values";
-import Link from "next/link";
-import { EditIcon, Trash2Icon } from "lucide-react";
+import EditTransactionsButton from "../_components/edit-transaction-button";
+import DeleteTransactionButton from "../_components/delete-transaction-button";
 
 export const TransactionsColumns: ColumnDef<Transaction>[] = [
   {
@@ -108,25 +108,12 @@ export const TransactionsColumns: ColumnDef<Transaction>[] = [
   {
     accessorKey: "actions",
     header: "",
-    cell: ({
-      row: {
-        original: { id },
-      },
-    }) => {
+    cell: ({ row: { original: transaction } }) => {
       return (
         <div className="flex justify-between gap-2 px-2">
-          <Link
-            href={`/update-transactions?id=${id}`}
-            className="text-muted-foreground"
-          >
-            <EditIcon size={20} />
-          </Link>
-          <Link
-            href={`/delete-transactions?id=${id}`}
-            className="text-muted-foreground"
-          >
-            <Trash2Icon size={20} />
-          </Link>
+          <EditTransactionsButton transaction={transaction} />
+
+          <DeleteTransactionButton />
         </div>
       );
     },
