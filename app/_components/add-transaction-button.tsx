@@ -48,6 +48,7 @@ import { DatePicker } from "./date-picker";
 import { toast } from "sonner";
 import { useState } from "react";
 import { mutate } from "swr";
+import { Progress } from "./ui/progress";
 
 const formSchema = z.object({
   name: z.string().trim().min(1, {
@@ -75,6 +76,8 @@ type FCHEMA = z.infer<typeof formSchema>;
 
 const AddTransactionsButton = () => {
   const [dialogIsOpen, setDialoIsOpen] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<FCHEMA>({
     resolver: zodResolver(formSchema),
@@ -89,7 +92,10 @@ const AddTransactionsButton = () => {
   });
 
   const onSubmit = async (data: FCHEMA) => {
+    setIsLoading(true);
+    setProgress(10);
     try {
+      setProgress(30);
       const result = await fetch("/api/transactions/add-transaction", {
         method: "POST",
         headers: {
@@ -98,18 +104,26 @@ const AddTransactionsButton = () => {
         body: JSON.stringify(data),
       });
 
-      mutate("/api/transactions");
-      const response = await result.json();
+      setProgress(70);
+      await mutate("/api/transactions/get-transaction");
 
-      if (response.success === false) {
-        return toast.warning(response.message);
-      }
+      setProgress(100);
+      setTimeout(async () => {
+        const response = await result.json();
 
-      toast.success(response.message || "");
-      form.reset();
-      setDialoIsOpen(false);
+        if (response.success === false) {
+          return toast.warning(response.message);
+        }
+
+        toast.success(response.message || "");
+        form.reset();
+        setDialoIsOpen(false);
+        setIsLoading(false);
+      }, 400);
     } catch (error) {
       toast.error("Ooops, algo incomum aconteceu!!" + error);
+      setIsLoading(false);
+      setProgress(0);
     }
   };
   return (
@@ -297,7 +311,7 @@ const AddTransactionsButton = () => {
                   </FormItem>
                 )}
               />
-
+              {isLoading && <Progress value={progress} className="w-full" />}
               <DialogFooter className="mt-auto">
                 <div className="flex w-full items-center justify-between gap-5">
                   <DialogClose asChild>
