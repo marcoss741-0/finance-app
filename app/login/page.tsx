@@ -1,9 +1,6 @@
-"use client";
-
 import Image from "next/image";
 import { Button } from "../_components/ui/button";
 import { LogInIcon } from "lucide-react";
-import { authClient } from "../_lib/auth-client";
 import {
   Dialog,
   DialogContent,
@@ -27,14 +24,18 @@ import {
 } from "../_components/ui/card";
 import LoginForm from "./_components/login-form";
 import RegisterForm from "./_components/register-form";
+import { headers } from "next/headers";
+import { auth } from "../_lib/auth";
+import { redirect } from "next/navigation";
 
-const LoginPage = () => {
-  const handleSignInGoogle = async () => {
-    await authClient.signIn.social({
-      provider: "google",
-      callbackURL: "/",
-    });
-  };
+const LoginPage = async () => {
+  const session = await auth.api.getSession({
+    headers: headers(),
+  });
+
+  if (session) {
+    redirect("/");
+  }
 
   return (
     <div className="grid h-full grid-cols-2 justify-center p-5">
@@ -78,31 +79,8 @@ const LoginPage = () => {
                       </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-2">
+                      {/* Formulario de login */}
                       <LoginForm />
-
-                      <div className="relative my-4">
-                        <div className="absolute inset-0 flex items-center">
-                          <span className="w-full border-t" />
-                        </div>
-                        <div className="relative flex justify-center text-xs uppercase">
-                          <span className="bg-background px-2 text-muted-foreground">
-                            Ou continue com
-                          </span>
-                        </div>
-                      </div>
-                      <Button
-                        className="w-full gap-2 p-2 text-[14px] font-medium"
-                        variant="outline"
-                        onClick={handleSignInGoogle}
-                      >
-                        <Image
-                          src="/google.svg"
-                          width={18}
-                          height={18}
-                          alt="Login with google"
-                        />
-                        Entrar com o Google
-                      </Button>
                     </CardContent>
                   </Card>
                 </TabsContent>
@@ -113,6 +91,7 @@ const LoginPage = () => {
                       <CardDescription>Insira suas credenciais</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-2">
+                      {/* Formulario de cadastro */}
                       <RegisterForm />
                     </CardContent>
                   </Card>

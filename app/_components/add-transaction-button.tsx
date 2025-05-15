@@ -45,13 +45,14 @@ import {
   TRANSACTION_TYPE,
 } from "../_constants/transactions";
 import { DatePicker } from "./date-picker";
+import { toast } from "sonner";
 
 const formSchema = z.object({
-  title: z.string().trim().min(1, {
+  name: z.string().trim().min(1, {
     message: "Titulo da transação é obrigatório!",
   }),
-  amount: z.string().min(1, {
-    message: "O valor não pode ser negativo!",
+  amount: z.number().positive({
+    message: "O valor deve ser maior que zero!",
   }),
   type: z.nativeEnum(TransactionType, {
     required_error: "O tipo de transação é obrigatório",
@@ -74,8 +75,8 @@ const AddTransactionsButton = () => {
   const form = useForm<FCHEMA>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: "",
-      amount: "",
+      name: "",
+      amount: 0,
       category: TransactionCategory.OTHER,
       type: TransactionType.EXPENSE,
       paymentMethod: TransactionPaymentMethod.OTHER,
@@ -83,8 +84,25 @@ const AddTransactionsButton = () => {
     },
   });
 
-  const onSubmit = (data: FCHEMA) => {
-    console.log(data);
+  const onSubmit = async (data: FCHEMA) => {
+    try {
+      const result = await fetch("/api/add-transaction", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+      const response = await result.json();
+
+      if (response.success === false) {
+        return toast.warning(response.message);
+      }
+
+      toast.success(response.message || "");
+    } catch (error) {
+      toast.error("Ooops, algo incomum aconteceu!!" + error);
+    }
   };
   return (
     <>
@@ -117,7 +135,7 @@ const AddTransactionsButton = () => {
             >
               <FormField
                 control={form.control}
-                name="title"
+                name="name"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Título</FormLabel>
