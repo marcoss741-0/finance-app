@@ -1,4 +1,4 @@
-import { format } from "date-fns";
+import { format, parseISO } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
 export const formatCurrency = (value: number): string => {
@@ -8,6 +8,7 @@ export const formatCurrency = (value: number): string => {
   });
 };
 
-export const formatLocalDate = (date: Date) => {
-  return format(date, `dd 'de' MMMM 'de' yyyy`, { locale: ptBR });
+export const formatLocalDate = (date: string | Date) => {
+  const parsedDate = typeof date === "string" ? parseISO(date) : date;
+  return format(parsedDate, `dd 'de' MMMM 'de' yyyy`, { locale: ptBR });
 };

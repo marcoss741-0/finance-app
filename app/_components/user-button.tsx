@@ -61,7 +61,7 @@ const UserButton = ({ session }: UserButtonProps) => {
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <div className="flex cursor-pointer gap-4 rounded-full border p-4">
+          <div className="flex cursor-pointer gap-4 rounded-md border p-4">
             {isLoading ? (
               <Image
                 src="/loader2.svg"
@@ -70,7 +70,7 @@ const UserButton = ({ session }: UserButtonProps) => {
                 height={36}
               />
             ) : (
-              <Avatar className="h-8 w-8 rounded-lg">
+              <Avatar className="h-8 w-8 rounded-lg grayscale">
                 <AvatarImage
                   src={session.user.image || "icons8-user-48.png"}
                   alt={session.user.name}
@@ -79,11 +79,8 @@ const UserButton = ({ session }: UserButtonProps) => {
               </Avatar>
             )}
 
-            <div className="grid flex-1 text-left text-sm leading-tight">
+            <div className="grid flex-1 items-center text-left text-sm leading-tight">
               <span className="truncate font-medium">{session.user.name}</span>
-              <span className="truncate text-xs text-muted-foreground">
-                {session.user.email}
-              </span>
             </div>
           </div>
         </DropdownMenuTrigger>
