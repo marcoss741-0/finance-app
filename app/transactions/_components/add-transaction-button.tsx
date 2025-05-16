@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { Button } from "./ui/button";
+import { Button } from "../../_components/ui/button";
 import { ArrowUpDown } from "lucide-react";
-import UpsertDialogTransaction from "./upsert-dialog-transaction";
+import UpsertDialogTransaction from "../../_components/upsert-dialog-transaction";
 
 interface AddTransactionsParams {
   userId: string;

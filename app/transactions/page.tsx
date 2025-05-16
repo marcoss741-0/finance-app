@@ -1,5 +1,5 @@
 import { headers } from "next/headers";
-import AddTransactionsButton from "../_components/add-transaction-button";
+import AddTransactionsButton from "./_components/add-transaction-button";
 import { redirect } from "next/navigation";
 import { auth } from "../_lib/auth";
 import TransactionsTable from "../_components/transactions-table";
