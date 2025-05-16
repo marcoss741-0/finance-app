@@ -33,11 +33,11 @@ export const UpsertTransactionAction = async (
   }
 
   await prisma.transaction.upsert({
+    update: { ...params, userId },
+    create: { ...params, userId },
     where: {
       id: params.id || "",
     },
-    update: { ...params, userId },
-    create: { ...params, userId },
   });
   revalidatePath("/transactions");
 

@@ -115,7 +115,6 @@ const UpsertDialogTransaction = ({
       });
 
       setProgress(70);
-      await mutate("/api/transactions/get-transaction");
 
       setProgress(100);
       setTimeout(async () => {
@@ -126,6 +125,7 @@ const UpsertDialogTransaction = ({
         }
 
         toast.success(response.message || "");
+        await mutate("/api/transactions/get-transaction");
         form.reset();
         setIsOpen(false);
         setIsLoading(false);

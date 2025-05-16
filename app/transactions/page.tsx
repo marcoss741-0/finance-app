@@ -25,7 +25,7 @@ const Transactions = async () => {
             <AddTransactionsButton />
           </div>
         </div>
-        <TransactionsTable />
+        <TransactionsTable userId={session.user.id} />
       </div>
     </>
   );
