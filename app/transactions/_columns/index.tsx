@@ -113,7 +113,7 @@ export const TransactionsColumns: ColumnDef<Transaction>[] = [
         <div className="flex justify-between gap-2 px-2">
           <EditTransactionsButton transaction={transaction} />
 
-          <DeleteTransactionButton />
+          <DeleteTransactionButton ID={transaction.id} />
         </div>
       );
     },

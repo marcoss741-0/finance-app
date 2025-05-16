@@ -9,11 +9,11 @@ export async function POST(req: Request) {
 
     const response = await UpsertTransactionAction({ id, ...data });
 
-    if (response.success === false) {
+    if (!response.success) {
       return NextResponse.json(response, { status: 401 });
     }
 
-    if (response.success === true) {
+    if (response.success) {
       revalidatePath("/transactions");
       return NextResponse.json(response, { status: 201 });
     }
