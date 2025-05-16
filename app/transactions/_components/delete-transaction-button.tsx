@@ -1,7 +1,8 @@
 "use client";
 
 import { Button } from "@/app/_components/ui/button";
-import { Trash2Icon } from "lucide-react";
+import { Loader, TrashIcon } from "lucide-react";
+import { useState } from "react";
 import { toast } from "sonner";
 import { mutate } from "swr";
 
@@ -10,7 +11,10 @@ interface DeleteTransactionParams {
 }
 
 const DeleteTransactionButton = ({ ID }: DeleteTransactionParams) => {
+  const [isLoading, setIsloading] = useState(false);
+
   const handleDeleteTransaction = async () => {
+    setIsloading(true);
     try {
       const res = await fetch(`/api/transactions/delete-transaction`, {
         method: "POST",
@@ -25,9 +29,11 @@ const DeleteTransactionButton = ({ ID }: DeleteTransactionParams) => {
       toast.success(response.message || "");
     } catch (error) {
       console.log(error);
+      setIsloading(false);
     }
 
     await mutate("/api/transactions/get-transaction");
+    setIsloading(false);
   };
 
   return (
@@ -38,7 +44,7 @@ const DeleteTransactionButton = ({ ID }: DeleteTransactionParams) => {
         className="text-muted-foreground"
         onClick={handleDeleteTransaction}
       >
-        <Trash2Icon />
+        {isLoading ? <Loader className="animate-spin" /> : <TrashIcon />}
       </Button>
     </>
   );

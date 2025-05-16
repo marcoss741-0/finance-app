@@ -31,10 +31,10 @@ import Image from "next/image";
 
 interface UserButtonProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  session: any;
+  user: any;
 }
 
-const UserButton = ({ session }: UserButtonProps) => {
+const UserButton = ({ user }: UserButtonProps) => {
   const [DialogOpen, setDialogIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
@@ -72,15 +72,15 @@ const UserButton = ({ session }: UserButtonProps) => {
             ) : (
               <Avatar className="h-8 w-8 rounded-lg grayscale">
                 <AvatarImage
-                  src={session.user.image || "icons8-user-48.png"}
-                  alt={session.user.name}
+                  src={user.image || "icons8-user-48.png"}
+                  alt={user.name}
                 />
                 <AvatarFallback className="rounded-lg">FA</AvatarFallback>
               </Avatar>
             )}
 
             <div className="grid flex-1 items-center text-left text-sm leading-tight">
-              <span className="truncate font-medium">{session.user.name}</span>
+              <span className="truncate font-medium">{user.name}</span>
             </div>
           </div>
         </DropdownMenuTrigger>
@@ -93,17 +93,15 @@ const UserButton = ({ session }: UserButtonProps) => {
             <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
               <Avatar className="h-8 w-8 rounded-lg">
                 <AvatarImage
-                  src={session.user.image || "icons8-user-48.png"}
-                  alt={session.user.name}
+                  src={user.image || "icons8-user-48.png"}
+                  alt={user.name}
                 />
                 <AvatarFallback className="rounded-lg">FA</AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-medium">
-                  {session.user.name}
-                </span>
+                <span className="truncate font-medium">{user.name}</span>
                 <span className="truncate text-xs text-muted-foreground">
-                  {session.user.email}
+                  {user.email}
                 </span>
               </div>
             </div>

@@ -3,6 +3,7 @@ import AddTransactionsButton from "../_components/add-transaction-button";
 import { redirect } from "next/navigation";
 import { auth } from "../_lib/auth";
 import TransactionsTable from "../_components/transactions-table";
+import NavBar from "../_components/nav-bar";
 
 const Transactions = async () => {
   const session = await auth.api.getSession({
@@ -15,6 +16,7 @@ const Transactions = async () => {
 
   return (
     <>
+      <NavBar user={session.user} />
       <div className="space-y-6 p-6">
         <div className="relative flex w-full items-center p-5">
           <div className="flex w-full items-center justify-between">
@@ -23,10 +25,6 @@ const Transactions = async () => {
             <AddTransactionsButton />
           </div>
         </div>
-        {/* <DataTable
-          columns={TransactionsColumns}
-          data={JSON.parse(JSON.stringify(transactions))}
-        /> */}
         <TransactionsTable />
       </div>
     </>
