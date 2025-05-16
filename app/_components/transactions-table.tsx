@@ -4,14 +4,24 @@ import useSWR from "swr";
 import { DataTable } from "../_components/ui/data-table";
 import { TransactionsColumns } from "../transactions/_columns";
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
 interface TableProps {
   userId: string;
 }
-export default function TransactionsTable({ userId }: TableProps) {
+
+const fetcher = async ([url, userId]: [string, string]) => {
   const params = new URLSearchParams({ userId });
-  const url = `/api/transactions/get-transaction?${params.toString()}`;
-  const { data: transactions, isLoading } = useSWR(url, fetcher);
+  const res = await fetch(`${url}?${params.toString()}`);
+  if (!res.ok) throw new Error("Erro ao buscar transações");
+  return res.json();
+};
+
+export default function TransactionsTable({ userId }: TableProps) {
+  const swrKey: [string, string] = [
+    "/api/transactions/get-transaction",
+    userId,
+  ];
+
+  const { data: transactions, isLoading, error } = useSWR(swrKey, fetcher);
 
   if (isLoading)
     return (
@@ -19,6 +29,10 @@ export default function TransactionsTable({ userId }: TableProps) {
         <div id="loadingProgressG_1" className="loadingProgressG"></div>
       </div>
     );
+
+  if (error) {
+    return <p>Erro ao carregar transações.</p>;
+  }
 
   return (
     <DataTable

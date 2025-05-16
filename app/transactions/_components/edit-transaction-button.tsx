@@ -33,6 +33,7 @@ const EditTransactionsButton = ({ transaction }: EditTransactionsProps) => {
           date: new Date(transaction.date),
         }}
         transactionId={transaction.id}
+        userId={transaction.userId}
       />
     </>
   );

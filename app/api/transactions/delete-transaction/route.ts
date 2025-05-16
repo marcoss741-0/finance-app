@@ -1,4 +1,7 @@
+"use server";
+
 import { deleteTransactions } from "@/app/_actions/delete-transanctions";
+import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
@@ -11,6 +14,8 @@ export async function POST(req: Request) {
     }
 
     const response = await deleteTransactions(transactionId);
+
+    revalidatePath("/transactions");
 
     return NextResponse.json(response, { status: 200 });
   } catch (error) {

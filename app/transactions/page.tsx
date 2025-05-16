@@ -22,7 +22,7 @@ const Transactions = async () => {
           <div className="flex w-full items-center justify-between">
             <h2 className="text-2xl font-bold text-foreground">Transações</h2>
             {/* Botão de Adicionar transação  */}
-            <AddTransactionsButton />
+            <AddTransactionsButton userId={session.user.id} />
           </div>
         </div>
         <TransactionsTable userId={session.user.id} />

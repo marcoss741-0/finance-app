@@ -54,6 +54,8 @@ interface upsertDialogProps {
   setIsOpen: (isOpen: boolean) => void;
   defValues?: FCHEMA;
   transactionId?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  userId?: any;
 }
 
 const formSchema = z.object({
@@ -85,6 +87,7 @@ const UpsertDialogTransaction = ({
   setIsOpen,
   defValues,
   transactionId,
+  userId,
 }: upsertDialogProps) => {
   const [progress, setProgress] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
@@ -125,11 +128,17 @@ const UpsertDialogTransaction = ({
         }
 
         toast.success(response.message || "");
-        await mutate("/api/transactions/get-transaction");
         form.reset();
         setIsOpen(false);
         setIsLoading(false);
       }, 400);
+
+      const swrKey: [string, string] = [
+        "/api/transactions/get-transaction",
+        userId,
+      ];
+
+      await mutate(swrKey);
     } catch (error) {
       toast.error("Ooops, algo incomum aconteceu!!" + error);
       setIsLoading(false);

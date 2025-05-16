@@ -8,9 +8,11 @@ import { mutate } from "swr";
 
 interface DeleteTransactionParams {
   ID: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  userId: string | any;
 }
 
-const DeleteTransactionButton = ({ ID }: DeleteTransactionParams) => {
+const DeleteTransactionButton = ({ ID, userId }: DeleteTransactionParams) => {
   const [isLoading, setIsloading] = useState(false);
 
   const handleDeleteTransaction = async () => {
@@ -32,7 +34,12 @@ const DeleteTransactionButton = ({ ID }: DeleteTransactionParams) => {
       setIsloading(false);
     }
 
-    await mutate("/api/transactions/get-transaction");
+    const swrKey: [string, string] = [
+      "/api/transactions/get-transaction",
+      userId,
+    ];
+
+    await mutate(swrKey);
     setIsloading(false);
   };
 

@@ -1,3 +1,5 @@
+"use server";
+
 import { UpsertTransactionAction } from "@/app/_actions/upsert-transactions";
 import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";

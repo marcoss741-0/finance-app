@@ -5,7 +5,11 @@ import { Button } from "./ui/button";
 import { ArrowUpDown } from "lucide-react";
 import UpsertDialogTransaction from "./upsert-dialog-transaction";
 
-const AddTransactionsButton = () => {
+interface AddTransactionsParams {
+  userId: string;
+}
+
+const AddTransactionsButton = ({ userId }: AddTransactionsParams) => {
   const [dialogIsOpen, setDialoIsOpen] = useState(false);
 
   return (
@@ -21,6 +25,7 @@ const AddTransactionsButton = () => {
       <UpsertDialogTransaction
         isOpen={dialogIsOpen}
         setIsOpen={setDialoIsOpen}
+        userId={userId}
       />
     </>
   );
