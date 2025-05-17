@@ -28,9 +28,6 @@ export default async function Home({ searchParams: { month } }: HomeProps) {
     redirect("?month=01");
   }
 
-  // const result = await getInfoT(month);
-  // const data: ResumeData[] = await result;
-
   return (
     <>
       <NavBar user={session.user} />
@@ -45,11 +42,6 @@ export default async function Home({ searchParams: { month } }: HomeProps) {
           <div className="flex flex-col gap-6 overflow-hidden">
             <SummaryCards month={month} />
             <div className="grid h-full grid-cols-3 grid-rows-1 gap-6 overflow-hidden">
-              {/* <TransactionPieChart
-                DEP_TOTAL={Number(result[0]?.DEP_TOTAL)}
-                EXP_TOTAL={Number(result[0]?.EXP_TOTAL)}
-                INV_TOTAL={Number(result[0]?.INV_TOTAL)}
-              /> */}
               <TransactionPieChart month={month} />
             </div>
           </div>

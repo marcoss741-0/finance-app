@@ -11,11 +11,16 @@ import {
 } from "@/app/_components/ui/chart";
 import { TransactionType } from "@prisma/client";
 import ChartSkeleton from "./chart-skeleton";
+import PercentageItem from "./percentage-item";
+import { PiggyBankIcon, TrendingDownIcon, TrendingUpIcon } from "lucide-react";
 
 type ResumeData = {
   DEP_TOTAL: number;
   INV_TOTAL: number;
   EXP_TOTAL: number;
+  DPT: number;
+  EXP: number;
+  IVT: number;
 };
 
 interface PieChartParams {
@@ -42,16 +47,25 @@ const TransactionPieChart = ({ month }: PieChartParams) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    setLoading(true);
     async function fetchData() {
       try {
         const res = await fetch(`/api/transactions/get-resume?month=${month}`);
         const result = await res.json();
 
+        const typeData = result[0]?.TYP ?? 0;
+        const { DEPOSIT, EXPENSE, INVESTMENT } = typeData;
+
         setData({
           DEP_TOTAL: Number(result[0]?.DEP_TOTAL ?? 0),
           INV_TOTAL: Number(result[0]?.INV_TOTAL ?? 0),
           EXP_TOTAL: Number(result[0]?.EXP_TOTAL ?? 0),
+          DPT: Number(DEPOSIT),
+          EXP: Number(EXPENSE),
+          IVT: Number(INVESTMENT),
         });
+
+        console.log(DEPOSIT, EXPENSE, INVESTMENT);
       } catch (error) {
         console.error("Erro ao buscar dados:", error);
       } finally {
@@ -90,7 +104,7 @@ const TransactionPieChart = ({ month }: PieChartParams) => {
   if (!chartData.length) return <p>Nenhum dado disponível para exibir.</p>;
 
   return (
-    <Card className="flex flex-col p-6">
+    <Card className="flex flex-col gap-12 px-8 py-6">
       <CardContent className="flex-1 pb-0">
         <ChartContainer
           config={chartConfig}
@@ -110,23 +124,23 @@ const TransactionPieChart = ({ month }: PieChartParams) => {
           </PieChart>
         </ChartContainer>
 
-        {/* <div className="space-y-3">
+        <div className="space-y-3">
           <PercentageItem
             icon={<TrendingUpIcon size={16} className="text-primary" />}
             title="Receita"
-            value={typesPercentage[TransactionType.DEPOSIT]}
+            value={Number(data?.DPT)}
           />
           <PercentageItem
             icon={<TrendingDownIcon size={16} className="text-red-500" />}
             title="Despesas"
-            value={typesPercentage[TransactionType.EXPENSE]}
+            value={Number(data?.EXP)}
           />
           <PercentageItem
             icon={<PiggyBankIcon size={16} />}
             title="Investido"
-            value={typesPercentage[TransactionType.INVESTMENT]}
+            value={Number(data?.IVT)}
           />
-        </div> */}
+        </div>
       </CardContent>
     </Card>
   );
