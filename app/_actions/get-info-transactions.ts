@@ -1,6 +1,9 @@
 "use server";
 
-import { TransactionPercentagePerType } from "@/types/transactions-types";
+import {
+  TotalExpensePerCategory,
+  TransactionPercentagePerType,
+} from "@/types/transactions-types";
 import { prisma } from "../_lib/prisma";
 import { TransactionType } from "@prisma/client";
 
@@ -41,6 +44,7 @@ export const getInfoT = async (month: string) => {
 
     const balance = Number(dpt) - Number(ivt) - Number(exp);
 
+    // Função destinada a logica de porcentagem das minha receitas, gastos e investimentos
     const transactionsTotal = Number(
       (
         await prisma.transaction.aggregate({
@@ -61,6 +65,34 @@ export const getInfoT = async (month: string) => {
       ),
     };
 
+    // Função destinada a retornar os gastos por categoria
+    const totalExpensePerCategory: TotalExpensePerCategory[] = (
+      await prisma.transaction.groupBy({
+        by: ["category"],
+        where: {
+          ...where,
+          type: TransactionType.EXPENSE,
+        },
+        _sum: {
+          amount: true,
+        },
+      })
+    ).map((category) => ({
+      category: category.category,
+      totalAmount: Number(category._sum.amount),
+      percentageOfTotal: Math.round(
+        (Number(category._sum.amount) / Number(expensesTotal._sum.amount)) *
+          100,
+      ),
+    }));
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const lastTransactions = await prisma.transaction.findMany({
+      where,
+      orderBy: { date: "desc" },
+      take: 15,
+    });
+
     return [
       {
         BALANCE: balance,
@@ -68,6 +100,8 @@ export const getInfoT = async (month: string) => {
         INV_TOTAL: ivt,
         EXP_TOTAL: exp,
         TYP: typesPercentage,
+        TEC: totalExpensePerCategory,
+        LAST_TRANSACTIONS: lastTransactions,
       },
     ];
   } catch (error) {

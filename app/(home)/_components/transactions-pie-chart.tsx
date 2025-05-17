@@ -48,7 +48,7 @@ const TransactionPieChart = ({ month }: PieChartParams) => {
 
   useEffect(() => {
     setLoading(true);
-    async function fetchData() {
+    async function fetchPieChartData() {
       try {
         const res = await fetch(`/api/transactions/get-resume?month=${month}`);
         const result = await res.json();
@@ -64,8 +64,6 @@ const TransactionPieChart = ({ month }: PieChartParams) => {
           EXP: Number(EXPENSE),
           IVT: Number(INVESTMENT),
         });
-
-        console.log(DEPOSIT, EXPENSE, INVESTMENT);
       } catch (error) {
         console.error("Erro ao buscar dados:", error);
       } finally {
@@ -73,7 +71,7 @@ const TransactionPieChart = ({ month }: PieChartParams) => {
       }
     }
 
-    fetchData();
+    fetchPieChartData();
   }, [month]);
 
   const chartData = [
@@ -104,7 +102,7 @@ const TransactionPieChart = ({ month }: PieChartParams) => {
   if (!chartData.length) return <p>Nenhum dado disponível para exibir.</p>;
 
   return (
-    <Card className="flex flex-col gap-12 px-8 py-6">
+    <Card className="flex flex-col gap-12 bg-[#1d1c1c] px-8 py-6">
       <CardContent className="flex-1 pb-0">
         <ChartContainer
           config={chartConfig}

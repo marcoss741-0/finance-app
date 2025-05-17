@@ -22,7 +22,7 @@ const SummaryCards = ({ month }: SummaryCardParams) => {
 
   useEffect(() => {
     setIsloading(true);
-    async function fetchInfos() {
+    async function fetchSummaryInfos() {
       try {
         const response = await fetch(
           `/api/transactions/get-resume?month=${month}`,
@@ -37,7 +37,7 @@ const SummaryCards = ({ month }: SummaryCardParams) => {
       }
     }
 
-    fetchInfos();
+    fetchSummaryInfos();
   }, [month]);
 
   return (
