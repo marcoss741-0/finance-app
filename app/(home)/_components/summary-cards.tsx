@@ -5,7 +5,7 @@ import SummaryCard from "./summary-card";
 import { useEffect, useState } from "react";
 import SummarySkeleton from "./summary-skeleton";
 
-type ResumeData = {
+export type ResumeData = {
   BALANCE: number;
   DEP_TOTAL: number;
   INV_TOTAL: number;
@@ -21,6 +21,7 @@ const SummaryCards = ({ month }: SummaryCardParams) => {
   const [loading, setIsloading] = useState(true);
 
   useEffect(() => {
+    setIsloading(true);
     async function fetchInfos() {
       try {
         const response = await fetch(
@@ -44,36 +45,34 @@ const SummaryCards = ({ month }: SummaryCardParams) => {
       {loading ? (
         <SummarySkeleton />
       ) : (
-        <>
-          <div className="space-y-6">
+        <div className="space-y-6">
+          <SummaryCard
+            icon={<Wallet size={16} />}
+            title="Saldo"
+            amount={values?.BALANCE ?? 0}
+            size="large"
+          />
+
+          <div className="grid grid-cols-3 gap-6">
             <SummaryCard
-              icon={<Wallet size={16} />}
-              title="Saldo"
-              amount={values?.BALANCE ?? 0}
-              size="large"
+              icon={<PiggyBankIcon size={18} />}
+              title="Investido"
+              amount={values?.INV_TOTAL ?? 0}
             />
 
-            <div className="grid grid-cols-3 gap-6">
-              <SummaryCard
-                icon={<PiggyBankIcon size={18} />}
-                title="Investido"
-                amount={values?.INV_TOTAL ?? 0}
-              />
+            <SummaryCard
+              icon={<TrendingUp size={18} className="text-primary" />}
+              title="Receita"
+              amount={values?.DEP_TOTAL ?? 0}
+            />
 
-              <SummaryCard
-                icon={<TrendingUp size={18} className="text-primary" />}
-                title="Receita"
-                amount={values?.DEP_TOTAL ?? 0}
-              />
-
-              <SummaryCard
-                icon={<TrendingDown size={18} className="text-danger" />}
-                title="Despesas"
-                amount={values?.EXP_TOTAL ?? 0}
-              />
-            </div>
+            <SummaryCard
+              icon={<TrendingDown size={18} className="text-danger" />}
+              title="Despesas"
+              amount={values?.EXP_TOTAL ?? 0}
+            />
           </div>
-        </>
+        </div>
       )}
     </>
   );

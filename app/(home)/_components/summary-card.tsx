@@ -19,7 +19,7 @@ const SummaryCard = ({
 }: summaryCardProps) => {
   return (
     <>
-      <Card>
+      <Card className="bg-[#1d1c1c]">
         <CardHeader className="flex-row items-center gap-4">
           {icon}
           <p
@@ -28,7 +28,7 @@ const SummaryCard = ({
             {title}
           </p>
         </CardHeader>
-        <CardContent className="flex justify-between">
+        <CardContent className={`flex justify-between`}>
           <p
             className={`${size === "small" ? "text-2xl" : "text-4xl"} font-bold`}
           >
