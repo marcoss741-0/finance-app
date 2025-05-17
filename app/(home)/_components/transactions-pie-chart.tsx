@@ -2,7 +2,13 @@
 
 import { PieChart, Pie } from "recharts";
 import { useEffect, useState } from "react";
-import { Card, CardContent } from "@/app/_components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/app/_components/ui/card";
 import {
   ChartConfig,
   ChartContainer,
@@ -13,6 +19,8 @@ import { TransactionType } from "@prisma/client";
 import ChartSkeleton from "./chart-skeleton";
 import PercentageItem from "./percentage-item";
 import { PiggyBankIcon, TrendingDownIcon, TrendingUpIcon } from "lucide-react";
+import Image from "next/image";
+import { ScrollArea } from "@/app/_components/ui/scroll-area";
 
 type ResumeData = {
   DEP_TOTAL: number;
@@ -25,6 +33,7 @@ type ResumeData = {
 
 interface PieChartParams {
   month?: string;
+  label?: string;
 }
 
 const chartConfig = {
@@ -42,7 +51,7 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-const TransactionPieChart = ({ month }: PieChartParams) => {
+const TransactionPieChart = ({ month, label }: PieChartParams) => {
   const [data, setData] = useState<ResumeData | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -99,7 +108,27 @@ const TransactionPieChart = ({ month }: PieChartParams) => {
       </>
     );
 
-  if (!chartData.length) return <p>Nenhum dado disponível para exibir.</p>;
+  if (!chartData.length)
+    return (
+      <>
+        <ScrollArea className="flex flex-col gap-12 bg-[#1d1c1c] px-8 py-6">
+          <CardContent>
+            <CardHeader>
+              <CardTitle>Dados inexistentes</CardTitle>
+              <CardDescription>
+                <p>Nenhum dado disponível para exibir para o mês de {label}</p>
+              </CardDescription>
+            </CardHeader>
+            <Image
+              src="/banner-chart.svg"
+              alt="Chart Banner"
+              fill
+              className="mt-4 object-contain"
+            />
+          </CardContent>
+        </ScrollArea>
+      </>
+    );
 
   return (
     <Card className="flex flex-col gap-12 bg-[#1d1c1c] px-8 py-6">

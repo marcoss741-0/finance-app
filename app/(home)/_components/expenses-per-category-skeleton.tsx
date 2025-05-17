@@ -3,7 +3,7 @@ import { Skeleton } from "@/app/_components/ui/skeleton";
 
 export default function ExpensesPerCategorySkeleton() {
   return (
-    <Card className="col-span-2 h-full rounded-md border pb-6">
+    <Card className="col-span-2 h-full rounded-md border bg-[#1d1c1c] pb-6">
       <CardContent className="space-y-6 p-6">
         {/* Título */}
         <Skeleton className="h-6 w-1/3" />

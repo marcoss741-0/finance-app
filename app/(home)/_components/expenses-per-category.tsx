@@ -1,6 +1,11 @@
 "use client";
 
-import { CardContent, CardHeader, CardTitle } from "@/app/_components/ui/card";
+import {
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/app/_components/ui/card";
 import { ScrollArea } from "@/app/_components/ui/scroll-area";
 import { Progress } from "@/app/_components/ui/progress";
 import { useEffect, useState } from "react";
@@ -8,6 +13,7 @@ import { TransactionCategory } from "@prisma/client";
 import { TRANSACTION_CATEGORY_LABELS } from "../../_constants/transactions";
 import ExpensesPerCategorySkeleton from "./expenses-per-category-skeleton";
 import { formatCurrency } from "@/app/_helpers/format-values";
+import Image from "next/image";
 
 interface ExpensesPerCategoryParams {
   month?: string;
@@ -53,6 +59,25 @@ const ExpensesPerCategory = ({ month }: ExpensesPerCategoryParams) => {
       <>
         <ExpensesPerCategorySkeleton />
       </>
+    );
+  }
+
+  if (!expenses?.length) {
+    return (
+      <ScrollArea className="col-span-2 h-full rounded-md border bg-[#1d1c1c] pb-6">
+        <CardContent>
+          <CardHeader className="justify-center">
+            <CardTitle>Sem Gastos</CardTitle>
+            <CardDescription>Não a dados para exibir</CardDescription>
+          </CardHeader>
+          <Image
+            src="/banner-expenses.svg"
+            alt="Expenses Banner"
+            fill
+            className="mt-4 object-contain"
+          />
+        </CardContent>
+      </ScrollArea>
     );
   }
 

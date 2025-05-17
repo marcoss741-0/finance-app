@@ -61,6 +61,24 @@ const LastTransactions = ({ month }: LastTransactionsParams) => {
     return <LastTransactionsSkeleton />;
   }
 
+  if (!transactions?.length) {
+    return (
+      <ScrollArea className="rounded-md border bg-[#1d1c1c]">
+        <CardHeader className="flex-row items-center justify-between">
+          <CardTitle className="font-bold">Últimas Transações</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <Image
+            src="/banner-last.svg"
+            alt="Last Transactions banner"
+            fill
+            className="object-contain"
+          />
+        </CardContent>
+      </ScrollArea>
+    );
+  }
+
   return (
     <ScrollArea className="rounded-md border bg-[#1d1c1c]">
       <CardHeader className="flex-row items-center justify-between">

@@ -1,9 +1,10 @@
-import { Card, CardContent } from "@/app/_components/ui/card";
+import { CardContent } from "@/app/_components/ui/card";
+import { ScrollArea } from "@/app/_components/ui/scroll-area";
 import { Skeleton } from "@/app/_components/ui/skeleton";
 
 export default function LastTransactionsSkeleton() {
   return (
-    <Card className="w-full max-w-md">
+    <ScrollArea className="rounded-md border bg-[#1d1c1c]">
       <CardContent className="space-y-6 p-6">
         {/* Título + Botão */}
         <div className="flex items-center justify-between">
@@ -30,6 +31,6 @@ export default function LastTransactionsSkeleton() {
           ))}
         </div>
       </CardContent>
-    </Card>
+    </ScrollArea>
   );
 }

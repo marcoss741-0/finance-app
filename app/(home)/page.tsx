@@ -30,6 +30,32 @@ export default async function Home({ searchParams: { month } }: HomeProps) {
     redirect("?month=01");
   }
 
+  function getMonthName(month: string): string {
+    const months = [
+      "Janeiro",
+      "Fevereiro",
+      "Março",
+      "Abril",
+      "Maio",
+      "Junho",
+      "Julho",
+      "Agosto",
+      "Setembro",
+      "Outubro",
+      "Novembro",
+      "Dezembro",
+    ];
+
+    const index = parseInt(month, 10) - 1;
+
+    // Verificação de validade
+    if (index >= 0 && index < 12) {
+      return months[index];
+    }
+
+    return "Mês inválido";
+  }
+
   return (
     <>
       <NavBar user={session.user} />
@@ -44,7 +70,7 @@ export default async function Home({ searchParams: { month } }: HomeProps) {
           <div className="flex flex-col gap-6 overflow-hidden">
             <SummaryCards month={month} />
             <div className="grid h-full grid-cols-3 grid-rows-1 gap-6 overflow-hidden">
-              <TransactionPieChart month={month} />
+              <TransactionPieChart month={month} label={getMonthName(month)} />
               <ExpensesPerCategory month={month} />
             </div>
           </div>
