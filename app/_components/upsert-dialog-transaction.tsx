@@ -139,6 +139,7 @@ const UpsertDialogTransaction = ({
       ];
 
       await mutate(swrKey);
+      await mutate("/api/transaction/get-resume");
     } catch (error) {
       toast.error("Ooops, algo incomum aconteceu!!" + error);
       setIsLoading(false);
