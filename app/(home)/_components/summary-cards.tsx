@@ -3,7 +3,7 @@
 import { PiggyBankIcon, TrendingDown, TrendingUp, Wallet } from "lucide-react";
 import SummaryCard from "./summary-card";
 import { useEffect, useState } from "react";
-import SummarySkeleton from "./summary-skeleton";
+import SummarySkeleton from "./skeleton-loaders/summary-skeleton";
 
 export type ResumeData = {
   BALANCE: number;

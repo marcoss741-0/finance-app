@@ -9,7 +9,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { Transaction, TransactionType } from "@prisma/client";
 import { TRANSACTION_PAYMENT_METHOD_ICONS } from "@/app/_constants/transactions";
-import LastTransactionsSkeleton from "./last-transaction-skeleton";
+import LastTransactionsSkeleton from "./skeleton-loaders/last-transaction-skeleton";
 
 interface LastTransactionsParams {
   month?: string;

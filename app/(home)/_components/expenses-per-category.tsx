@@ -11,7 +11,7 @@ import { Progress } from "@/app/_components/ui/progress";
 import { useEffect, useState } from "react";
 import { TransactionCategory } from "@prisma/client";
 import { TRANSACTION_CATEGORY_LABELS } from "../../_constants/transactions";
-import ExpensesPerCategorySkeleton from "./expenses-per-category-skeleton";
+import ExpensesPerCategorySkeleton from "./skeleton-loaders/expenses-per-category-skeleton";
 import { formatCurrency } from "@/app/_helpers/format-values";
 import Image from "next/image";
 

@@ -16,7 +16,7 @@ import {
   ChartTooltipContent,
 } from "@/app/_components/ui/chart";
 import { TransactionType } from "@prisma/client";
-import ChartSkeleton from "./chart-skeleton";
+import ChartSkeleton from "./skeleton-loaders/chart-skeleton";
 import PercentageItem from "./percentage-item";
 import { PiggyBankIcon, TrendingDownIcon, TrendingUpIcon } from "lucide-react";
 import Image from "next/image";
