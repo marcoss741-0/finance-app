@@ -14,9 +14,10 @@ export type ResumeData = {
 
 interface SummaryCardParams {
   month?: string;
+  userID?: string;
 }
 
-const SummaryCards = ({ month }: SummaryCardParams) => {
+const SummaryCards = ({ month, userID }: SummaryCardParams) => {
   const [values, setValues] = useState<ResumeData>();
   const [loading, setIsloading] = useState(true);
 
@@ -25,7 +26,7 @@ const SummaryCards = ({ month }: SummaryCardParams) => {
     async function fetchSummaryInfos() {
       try {
         const response = await fetch(
-          `/api/transactions/get-resume?month=${month}`,
+          `/api/transactions/get-resume?month=${month}&userID=${userID}`,
         );
         const data = await response.json();
 

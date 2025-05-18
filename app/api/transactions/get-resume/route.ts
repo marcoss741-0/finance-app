@@ -6,7 +6,9 @@ import { NextResponse } from "next/server";
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const month = searchParams.get("month")?.toString() || "";
-  const transactions = await getInfoT(month);
+  const userID = searchParams.get("userID")?.toString() || "";
+
+  const transactions = await getInfoT(month, userID);
 
   return NextResponse.json(transactions);
 }

@@ -17,6 +17,7 @@ import Image from "next/image";
 
 interface ExpensesPerCategoryParams {
   month?: string;
+  userID?: string;
 }
 
 type TotalExpensePerCategory = [
@@ -29,7 +30,7 @@ type TotalExpensePerCategory = [
 
 // {category: 'OTHER', totalAmount: 77, percentageOfTotal: null}
 
-const ExpensesPerCategory = ({ month }: ExpensesPerCategoryParams) => {
+const ExpensesPerCategory = ({ month, userID }: ExpensesPerCategoryParams) => {
   const [expenses, setExpenses] = useState<TotalExpensePerCategory | null>();
   const [isLoading, setIsLoading] = useState(true);
 
@@ -38,7 +39,7 @@ const ExpensesPerCategory = ({ month }: ExpensesPerCategoryParams) => {
     async function fetchExpensesInfo() {
       try {
         const response = await fetch(
-          `/api/transactions/get-resume?month=${month}`,
+          `/api/transactions/get-resume?month=${month}&userID=${userID}`,
         );
         const data = await response.json();
         const expensesByCategory = data[0]?.TEC ?? 0;

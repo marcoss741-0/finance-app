@@ -13,9 +13,10 @@ import LastTransactionsSkeleton from "./skeleton-loaders/last-transaction-skelet
 
 interface LastTransactionsParams {
   month?: string;
+  userID?: string;
 }
 
-const LastTransactions = ({ month }: LastTransactionsParams) => {
+const LastTransactions = ({ month, userID }: LastTransactionsParams) => {
   const [transactions, setTransactions] = useState<Transaction[]>();
   const [isLoading, setIsLoading] = useState(true);
 
@@ -24,13 +25,12 @@ const LastTransactions = ({ month }: LastTransactionsParams) => {
     async function fetchLastTransactions() {
       try {
         const response = await fetch(
-          `/api/transactions/get-resume?month=${month}`,
+          `/api/transactions/get-resume?month=${month}&userID=${userID}`,
         );
         const data = await response.json();
         const transactionsProps = data[0]?.LAST_TRANSACTIONS;
 
         setTransactions(transactionsProps);
-        console.log(transactionsProps);
       } catch (error) {
         console.log(error);
       } finally {
@@ -114,37 +114,6 @@ const LastTransactions = ({ month }: LastTransactionsParams) => {
             </p>
           </div>
         ))}
-        {/* {lastTransactions.map((transaction) => (
-          <div
-            key={transaction.id}
-            className="flex items-center justify-between"
-          >
-            <div className="flex items-center gap-3">
-              <div className="rounded-lg bg-white bg-opacity-[3%] p-3 text-white">
-                <Image
-                  src={`/${TRANSACTION_PAYMENT_METHOD_ICONS[transaction.paymentMethod]}`}
-                  height={20}
-                  width={20}
-                  alt="PIX"
-                />
-              </div>
-              <div>
-                <p className="text-sm font-bold">{transaction.name}</p>
-                <p className="text-sm text-muted-foreground">
-                  {new Date(transaction.date).toLocaleDateString("pt-BR", {
-                    day: "2-digit",
-                    month: "short",
-                    year: "numeric",
-                  })}
-                </p>
-              </div>
-            </div>
-            <p className={`text-sm font-bold ${getAmountColor(transaction)}`}>
-              {getAmountPrefix(transaction)}
-              {formatCurrency(Number(transaction.amount))}
-            </p>
-          </div>
-        ))} */}
       </CardContent>
     </ScrollArea>
   );

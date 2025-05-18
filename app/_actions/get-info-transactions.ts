@@ -7,8 +7,9 @@ import {
 import { prisma } from "../_lib/prisma";
 import { TransactionType } from "@prisma/client";
 
-export const getInfoT = async (month: string) => {
+export const getInfoT = async (month?: string, userID?: string) => {
   const where = {
+    userId: userID,
     date: {
       gte: new Date(`2025-${month}-01`),
       lt: new Date(`2025-${month}-31`),
@@ -86,9 +87,10 @@ export const getInfoT = async (month: string) => {
       ),
     }));
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const lastTransactions = await prisma.transaction.findMany({
-      where,
+      where: {
+        userId: userID,
+      },
       orderBy: { date: "desc" },
       take: 15,
     });

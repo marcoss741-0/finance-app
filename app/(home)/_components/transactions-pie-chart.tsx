@@ -34,6 +34,7 @@ type ResumeData = {
 interface PieChartParams {
   month?: string;
   label?: string;
+  userID?: string;
 }
 
 const chartConfig = {
@@ -51,7 +52,7 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-const TransactionPieChart = ({ month, label }: PieChartParams) => {
+const TransactionPieChart = ({ month, label, userID }: PieChartParams) => {
   const [data, setData] = useState<ResumeData | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -59,7 +60,9 @@ const TransactionPieChart = ({ month, label }: PieChartParams) => {
     setLoading(true);
     async function fetchPieChartData() {
       try {
-        const res = await fetch(`/api/transactions/get-resume?month=${month}`);
+        const res = await fetch(
+          `/api/transactions/get-resume?month=${month}&userID=${userID}`,
+        );
         const result = await res.json();
 
         const typeData = result[0]?.TYP ?? 0;
@@ -116,7 +119,7 @@ const TransactionPieChart = ({ month, label }: PieChartParams) => {
             <CardHeader>
               <CardTitle>Dados inexistentes</CardTitle>
               <CardDescription>
-                <p>Nenhum dado disponível para exibir para o mês de {label}</p>
+                <p>Nenhum dado disponível para o mês de {label}</p>
               </CardDescription>
             </CardHeader>
             <Image

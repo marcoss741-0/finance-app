@@ -68,13 +68,17 @@ export default async function Home({ searchParams: { month } }: HomeProps) {
 
         <div className="grid h-full grid-cols-[2fr,1fr] gap-6 overflow-hidden">
           <div className="flex flex-col gap-6 overflow-hidden">
-            <SummaryCards month={month} />
+            <SummaryCards month={month} userID={session.user.id} />
             <div className="grid h-full grid-cols-3 grid-rows-1 gap-6 overflow-hidden">
-              <TransactionPieChart month={month} label={getMonthName(month)} />
-              <ExpensesPerCategory month={month} />
+              <TransactionPieChart
+                month={month}
+                label={getMonthName(month)}
+                userID={session.user.id}
+              />
+              <ExpensesPerCategory month={month} userID={session.user.id} />
             </div>
           </div>
-          <LastTransactions month={month} />
+          <LastTransactions month={month} userID={session.user.id} />
         </div>
       </div>
     </>
