@@ -1,7 +1,6 @@
 "use client";
 
-import { PieChart, Pie } from "recharts";
-import { useEffect, useState } from "react";
+import { RadialBar, LabelList, RadialBarChart } from "recharts";
 import {
   Card,
   CardContent,
@@ -21,15 +20,7 @@ import PercentageItem from "./percentage-item";
 import { PiggyBankIcon, TrendingDownIcon, TrendingUpIcon } from "lucide-react";
 import Image from "next/image";
 import { ScrollArea } from "@/app/_components/ui/scroll-area";
-
-type ResumeData = {
-  DEP_TOTAL: number;
-  INV_TOTAL: number;
-  EXP_TOTAL: number;
-  DPT: number;
-  EXP: number;
-  IVT: number;
-};
+import { useTransactionData } from "@/app/_hooks/useTransactionData";
 
 interface PieChartParams {
   month?: string;
@@ -53,58 +44,39 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 const TransactionPieChart = ({ month, label, userID }: PieChartParams) => {
-  const [data, setData] = useState<ResumeData | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    setLoading(true);
-    async function fetchPieChartData() {
-      try {
-        const res = await fetch(
-          `/api/transactions/get-resume?month=${month}&userID=${userID}`,
-        );
-        const result = await res.json();
-
-        const typeData = result[0]?.TYP ?? 0;
-        const { DEPOSIT, EXPENSE, INVESTMENT } = typeData;
-
-        setData({
-          DEP_TOTAL: Number(result[0]?.DEP_TOTAL ?? 0),
-          INV_TOTAL: Number(result[0]?.INV_TOTAL ?? 0),
-          EXP_TOTAL: Number(result[0]?.EXP_TOTAL ?? 0),
-          DPT: Number(DEPOSIT),
-          EXP: Number(EXPENSE),
-          IVT: Number(INVESTMENT),
-        });
-      } catch (error) {
-        console.error("Erro ao buscar dados:", error);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    fetchPieChartData();
-  }, [month]);
+  const {
+    depositTotal,
+    investmentTotal,
+    expenseTotal,
+    transactionsByType,
+    isLoading,
+  } = useTransactionData(month, userID);
 
   const chartData = [
     {
       type: TransactionType.DEPOSIT,
-      amount: data?.DEP_TOTAL ?? 0,
+      amount: depositTotal ?? 0,
       fill: "#55B02E",
     },
     {
       type: TransactionType.EXPENSE,
-      amount: data?.EXP_TOTAL ?? 0,
+      amount: expenseTotal ?? 0,
       fill: "#E93030",
     },
     {
       type: TransactionType.INVESTMENT,
-      amount: data?.INV_TOTAL ?? 0,
-      fill: "#FFFFFF",
+      amount: investmentTotal ?? 0,
+      fill: "#428BCA",
     },
   ].filter((item) => item.amount > 0 && !isNaN(item.amount));
 
-  if (loading)
+  const resumePieData = {
+    DPT: transactionsByType?.DEPOSIT || 0,
+    EXP: transactionsByType?.EXPENSE || 0,
+    IVT: transactionsByType?.INVESTMENT || 0,
+  };
+
+  if (isLoading)
     return (
       <>
         <ChartSkeleton />
@@ -140,35 +112,43 @@ const TransactionPieChart = ({ month, label, userID }: PieChartParams) => {
           config={chartConfig}
           className="mx-auto aspect-square max-h-[250px]"
         >
-          <PieChart>
+          <RadialBarChart
+            data={chartData}
+            startAngle={-90}
+            endAngle={380}
+            innerRadius={30}
+            outerRadius={110}
+          >
             <ChartTooltip
               cursor={false}
-              content={<ChartTooltipContent hideLabel />}
+              content={<ChartTooltipContent hideLabel nameKey="type" />}
             />
-            <Pie
-              data={chartData}
-              dataKey="amount"
-              nameKey="type"
-              innerRadius={60}
-            />
-          </PieChart>
+            <RadialBar dataKey="amount" background>
+              <LabelList
+                position="insideStart"
+                dataKey="type"
+                className="fill-white capitalize mix-blend-luminosity"
+                fontSize={11}
+              />
+            </RadialBar>
+          </RadialBarChart>
         </ChartContainer>
 
         <div className="space-y-3">
           <PercentageItem
             icon={<TrendingUpIcon size={16} className="text-primary" />}
             title="Receita"
-            value={Number(data?.DPT)}
+            value={Number(resumePieData.DPT)}
           />
           <PercentageItem
             icon={<TrendingDownIcon size={16} className="text-red-500" />}
             title="Despesas"
-            value={Number(data?.EXP)}
+            value={Number(resumePieData.EXP)}
           />
           <PercentageItem
-            icon={<PiggyBankIcon size={16} />}
+            icon={<PiggyBankIcon size={16} className="text-[#428BCA]" />}
             title="Investido"
-            value={Number(data?.IVT)}
+            value={Number(resumePieData.IVT)}
           />
         </div>
       </CardContent>

@@ -89,7 +89,18 @@ export const TRANSACTION_TYPE = [
   },
 ];
 
-export const TRANSACTION_CATEGORY_LABELS = {
+export const TRANSACTION_CATEGORY_LABELS: {
+  [key: string]: string;
+  EDUCATION: string;
+  ENTERTAINMENT: string;
+  FOOD: string;
+  HEALTH: string;
+  HOUSING: string;
+  OTHER: string;
+  SALARY: string;
+  TRANSPORTATION: string;
+  UTILITY: string;
+} = {
   EDUCATION: "Educação",
   ENTERTAINMENT: "Entretenimento",
   FOOD: "Alimentação",
@@ -101,12 +112,21 @@ export const TRANSACTION_CATEGORY_LABELS = {
   UTILITY: "Utilidades",
 };
 
-export const TRANSACTION_PAYMENT_METHOD_ICONS = {
-  [TransactionPaymentMethod.CREDIT_CARD]: "credit-card.svg",
-  [TransactionPaymentMethod.DEBIT_CARD]: "debit-card.svg",
-  [TransactionPaymentMethod.BANK_TRANSFER]: "bank-transfer.svg",
-  [TransactionPaymentMethod.BANK_SLIP]: "bank-slip.svg",
-  [TransactionPaymentMethod.CASH]: "money.svg",
-  [TransactionPaymentMethod.PIX]: "pix.svg",
-  [TransactionPaymentMethod.OTHER]: "other.svg",
+export const TRANSACTION_PAYMENT_METHOD_ICONS: {
+  [key: string]: string;
+  CREDIT_CARD: string;
+  DEBIT_CARD: string;
+  BANK_TRANSFER: string;
+  BANK_SLIP: string;
+  CASH: string;
+  PIX: string;
+  OTHER: string;
+} = {
+  CREDIT_CARD: "credit-card.svg" as string,
+  DEBIT_CARD: "debit-card.svg" as string,
+  BANK_TRANSFER: "bank-transfer.svg" as string,
+  BANK_SLIP: "bank-slip.svg" as string,
+  CASH: "money.svg" as string,
+  PIX: "pix.svg" as string,
+  OTHER: "other.svg" as string,
 };

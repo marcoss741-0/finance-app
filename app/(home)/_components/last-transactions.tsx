@@ -6,40 +6,21 @@ import { ScrollArea } from "@/app/_components/ui/scroll-area";
 import { formatCurrency } from "@/app/_helpers/format-values";
 import Link from "next/link";
 import Image from "next/image";
-import { useEffect, useState } from "react";
 import { Transaction, TransactionType } from "@prisma/client";
 import { TRANSACTION_PAYMENT_METHOD_ICONS } from "@/app/_constants/transactions";
 import LastTransactionsSkeleton from "./skeleton-loaders/last-transaction-skeleton";
+import { useTransactionData } from "@/app/_hooks/useTransactionData";
 
 interface LastTransactionsParams {
-  month?: string;
-  userID?: string;
+  month: string;
+  userID: string;
 }
 
 const LastTransactions = ({ month, userID }: LastTransactionsParams) => {
-  const [transactions, setTransactions] = useState<Transaction[]>();
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    setIsLoading(true);
-    async function fetchLastTransactions() {
-      try {
-        const response = await fetch(
-          `/api/transactions/get-resume?month=${month}&userID=${userID}`,
-        );
-        const data = await response.json();
-        const transactionsProps = data[0]?.LAST_TRANSACTIONS;
-
-        setTransactions(transactionsProps);
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-
-    fetchLastTransactions();
-  }, [month]);
+  const { lastTransactions: transactions, isLoading } = useTransactionData(
+    month,
+    userID,
+  );
 
   const getAmountColor = (transaction: Transaction) => {
     if (transaction.type === TransactionType.EXPENSE) {
