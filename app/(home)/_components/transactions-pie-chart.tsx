@@ -54,17 +54,17 @@ const TransactionPieChart = ({ month, label, userID }: PieChartParams) => {
 
   const chartData = [
     {
-      type: TransactionType.DEPOSIT,
+      type: "DEPÓSITO",
       amount: depositTotal ?? 0,
       fill: "#55B02E",
     },
     {
-      type: TransactionType.EXPENSE,
+      type: "GASTOS",
       amount: expenseTotal ?? 0,
       fill: "#E93030",
     },
     {
-      type: TransactionType.INVESTMENT,
+      type: "INVESTIMENTOS",
       amount: investmentTotal ?? 0,
       fill: "#428BCA",
     },
