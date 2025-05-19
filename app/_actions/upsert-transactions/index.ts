@@ -40,6 +40,7 @@ export const UpsertTransactionAction = async (
     },
   });
   revalidatePath("/transactions");
+  revalidatePath("/");
 
   return { success: true, message: "Transação registrada com êxito!" };
 };

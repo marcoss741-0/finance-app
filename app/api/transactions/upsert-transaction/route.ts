@@ -17,6 +17,7 @@ export async function POST(req: Request) {
 
     if (response.success) {
       revalidatePath("/transactions");
+      revalidatePath("/");
       return NextResponse.json(response, { status: 201 });
     }
   } catch (error) {

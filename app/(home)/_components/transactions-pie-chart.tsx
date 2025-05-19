@@ -55,20 +55,20 @@ const TransactionPieChart = ({ month, label, userID }: PieChartParams) => {
   const chartData = [
     {
       type: "DEPÓSITO",
-      amount: depositTotal ?? 0,
+      total: depositTotal ?? 0,
       fill: "#55B02E",
     },
     {
       type: "GASTOS",
-      amount: expenseTotal ?? 0,
+      total: expenseTotal ?? 0,
       fill: "#E93030",
     },
     {
       type: "INVESTIMENTOS",
-      amount: investmentTotal ?? 0,
+      total: investmentTotal ?? 0,
       fill: "#428BCA",
     },
-  ].filter((item) => item.amount > 0 && !isNaN(item.amount));
+  ].filter((item) => item.total > 0 && !isNaN(item.total));
 
   const resumePieData = {
     DPT: transactionsByType?.DEPOSIT || 0,
@@ -110,20 +110,20 @@ const TransactionPieChart = ({ month, label, userID }: PieChartParams) => {
       <CardContent className="flex-1 pb-0">
         <ChartContainer
           config={chartConfig}
-          className="mx-auto aspect-square max-h-[250px]"
+          className="mx-auto aspect-square max-h-[250px] min-w-full"
         >
           <RadialBarChart
             data={chartData}
             startAngle={-90}
             endAngle={380}
-            innerRadius={30}
-            outerRadius={110}
+            innerRadius={60}
+            outerRadius={120}
           >
             <ChartTooltip
               cursor={false}
               content={<ChartTooltipContent hideLabel nameKey="type" />}
             />
-            <RadialBar dataKey="amount" background>
+            <RadialBar dataKey="total" background>
               <LabelList
                 position="insideStart"
                 dataKey="type"
