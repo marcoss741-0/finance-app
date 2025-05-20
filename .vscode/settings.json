@@ -1,5 +1,6 @@
 {
   "files.autoSave": "afterDelay",
   "editor.formatOnSave": true,
-  "notebook.formatOnSave.enabled": true
+  "notebook.formatOnSave.enabled": true,
+  "editor.wordWrap": "off"
 }
