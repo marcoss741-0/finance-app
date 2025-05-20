@@ -19,12 +19,12 @@ const NavBar = ({ user }: Props) => {
 
   return (
     <>
-      <nav className="flex w-full items-center justify-between border-b px-8 py-4">
-        <div className="flex items-center gap-8">
+      <nav className="flex justify-between border-b border-solid px-8 py-4">
+        <div className="flex items-center gap-10">
           <Image
             src="/logo.svg"
             alt="Logo da Aplicação"
-            width={174}
+            width={173}
             height={39}
           />
           <Link

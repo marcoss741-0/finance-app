@@ -1,10 +1,14 @@
 "use client";
 
-import { RadialBar, LabelList, RadialBarChart } from "recharts";
+import * as React from "react";
+import { PiggyBankIcon, TrendingDownIcon, TrendingUpIcon } from "lucide-react";
+import { Label, Pie, PieChart } from "recharts";
+
 import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/app/_components/ui/card";
@@ -14,13 +18,13 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/app/_components/ui/chart";
-import { TransactionType } from "@prisma/client";
-import ChartSkeleton from "./skeleton-loaders/chart-skeleton";
-import PercentageItem from "./percentage-item";
-import { PiggyBankIcon, TrendingDownIcon, TrendingUpIcon } from "lucide-react";
-import Image from "next/image";
-import { ScrollArea } from "@/app/_components/ui/scroll-area";
 import { useTransactionData } from "@/app/_hooks/useTransactionData";
+import { TransactionType } from "@prisma/client";
+import PercentageItem from "./percentage-item";
+import { ScrollArea } from "@/app/_components/ui/scroll-area";
+import ChartSkeleton from "./skeleton-loaders/chart-skeleton";
+import Image from "next/image";
+import { formatCurrency } from "@/app/_helpers/format-values";
 
 interface PieChartParams {
   month?: string;
@@ -28,47 +32,50 @@ interface PieChartParams {
   userID?: string;
 }
 
-const chartConfig = {
-  [TransactionType.INVESTMENT]: {
-    label: "Investido",
-    color: "#FFFFFF",
-  },
-  [TransactionType.DEPOSIT]: {
-    label: "Receita",
-    color: "#55B02E",
-  },
-  [TransactionType.EXPENSE]: {
-    label: "Despesas",
-    color: "#E93030",
-  },
-} satisfies ChartConfig;
-
-const TransactionPieChart = ({ month, label, userID }: PieChartParams) => {
+const TransactionPieChart = ({ label, month, userID }: PieChartParams) => {
   const {
+    balance,
     depositTotal,
-    investmentTotal,
     expenseTotal,
+    investmentTotal,
     transactionsByType,
     isLoading,
   } = useTransactionData(month, userID);
 
+  console.log(depositTotal, investmentTotal, expenseTotal, balance);
+
   const chartData = [
     {
-      type: "DEPÓSITO",
-      total: depositTotal ?? 0,
+      type: TransactionType.DEPOSIT,
+      amount: Number(depositTotal),
       fill: "#55B02E",
     },
     {
-      type: "GASTOS",
-      total: expenseTotal ?? 0,
-      fill: "#E93030",
-    },
-    {
-      type: "INVESTIMENTOS",
-      total: investmentTotal ?? 0,
+      type: TransactionType.INVESTMENT,
+      amount: Number(investmentTotal),
       fill: "#428BCA",
     },
-  ].filter((item) => item.total > 0 && !isNaN(item.total));
+    {
+      type: TransactionType.EXPENSE,
+      amount: Number(expenseTotal),
+      fill: "crimson",
+    },
+  ];
+
+  const chartConfig = {
+    visitors: {
+      label: "SALDO",
+    },
+    [TransactionType.DEPOSIT]: {
+      label: "Depósitos",
+    },
+    [TransactionType.INVESTMENT]: {
+      label: "Investidos",
+    },
+    [TransactionType.EXPENSE]: {
+      label: "Gastos",
+    },
+  } satisfies ChartConfig;
 
   const resumePieData = {
     DPT: transactionsByType?.DEPOSIT || 0,
@@ -83,57 +90,89 @@ const TransactionPieChart = ({ month, label, userID }: PieChartParams) => {
       </>
     );
 
-  if (!chartData.length)
+  if (!chartData[0].amount || !chartData[1].amount || !chartData[2].amount)
     return (
       <>
-        <ScrollArea className="flex flex-col gap-12 bg-[#1d1c1c] px-8 py-6">
+        <Card className="flex flex-col gap-12 bg-[#1d1c1c] px-8 py-6">
           <CardContent>
             <CardHeader>
               <CardTitle>Dados inexistentes</CardTitle>
               <CardDescription>
-                <p>Nenhum dado disponível para o mês de {label}</p>
+                <p>Você não fez movimentações em {label}</p>
               </CardDescription>
             </CardHeader>
             <Image
               src="/banner-chart.svg"
               alt="Chart Banner"
-              fill
-              className="mt-4 object-contain"
+              width={700}
+              height={700}
             />
           </CardContent>
-        </ScrollArea>
+        </Card>
       </>
     );
 
   return (
-    <Card className="flex flex-col gap-12 bg-[#1d1c1c] px-8 py-6">
+    <ScrollArea className="flex flex-col bg-[#1d1c1c]">
+      <CardHeader className="items-center pb-0">
+        <CardTitle>Balanço Mensal</CardTitle>
+        <CardDescription>{label} 2025</CardDescription>
+      </CardHeader>
       <CardContent className="flex-1 pb-0">
         <ChartContainer
           config={chartConfig}
-          className="mx-auto aspect-square max-h-[250px] min-w-full"
+          className="mx-auto aspect-square max-h-[250px]"
         >
-          <RadialBarChart
-            data={chartData}
-            startAngle={-90}
-            endAngle={380}
-            innerRadius={60}
-            outerRadius={120}
-          >
+          <PieChart>
             <ChartTooltip
               cursor={false}
-              content={<ChartTooltipContent hideLabel nameKey="type" />}
+              content={<ChartTooltipContent hideLabel />}
             />
-            <RadialBar dataKey="total" background>
-              <LabelList
-                position="insideStart"
-                dataKey="type"
-                className="fill-white capitalize mix-blend-luminosity"
-                fontSize={11}
+            <Pie
+              data={chartData}
+              dataKey="amount"
+              nameKey="type"
+              innerRadius={60}
+              strokeWidth={5}
+            >
+              <Label
+                content={({ viewBox }) => {
+                  if (viewBox && "cx" in viewBox && "cy" in viewBox) {
+                    return (
+                      <text
+                        x={viewBox.cx}
+                        y={viewBox.cy}
+                        textAnchor="middle"
+                        dominantBaseline="middle"
+                      >
+                        <tspan
+                          x={viewBox.cx}
+                          y={viewBox.cy}
+                          className="fill-foreground text-[18px] font-bold"
+                        >
+                          {formatCurrency(
+                            Number(balance) +
+                              Number(expenseTotal) +
+                              Number(investmentTotal),
+                          )}
+                        </tspan>
+                        <tspan
+                          x={viewBox.cx}
+                          y={(viewBox.cy || 0) + 24}
+                          className="fill-muted-foreground"
+                        >
+                          Receita total
+                        </tspan>
+                      </text>
+                    );
+                  }
+                }}
               />
-            </RadialBar>
-          </RadialBarChart>
+            </Pie>
+          </PieChart>
         </ChartContainer>
-
+      </CardContent>
+      <CardFooter className="flex-col gap-2 text-sm">
         <div className="space-y-3">
           <PercentageItem
             icon={<TrendingUpIcon size={16} className="text-primary" />}
@@ -151,8 +190,8 @@ const TransactionPieChart = ({ month, label, userID }: PieChartParams) => {
             value={Number(resumePieData.IVT)}
           />
         </div>
-      </CardContent>
-    </Card>
+      </CardFooter>
+    </ScrollArea>
   );
 };
 
