@@ -42,8 +42,6 @@ const TransactionPieChart = ({ label, month, userID }: PieChartParams) => {
     isLoading,
   } = useTransactionData(month, userID);
 
-  console.log(depositTotal, investmentTotal, expenseTotal, balance);
-
   const chartData = [
     {
       type: TransactionType.DEPOSIT,

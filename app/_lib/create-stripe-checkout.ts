@@ -3,7 +3,6 @@
 import Stripe from "stripe";
 import { auth } from "./auth";
 import { headers } from "next/headers";
-import { NextResponse } from "next/server";
 
 export const createStripeCheckout = async () => {
   const userSession = await auth.api.getSession({
@@ -27,10 +26,8 @@ export const createStripeCheckout = async () => {
     mode: "subscription",
     success_url: "http://localhost:3000",
     cancel_url: "http://localhost:3000",
-    subscription_data: {
-      metadata: {
-        better_userId: userId,
-      },
+    metadata: {
+      better_userID: userId,
     },
     line_items: [
       {
