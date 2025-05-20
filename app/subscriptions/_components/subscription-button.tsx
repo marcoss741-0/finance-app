@@ -4,9 +4,18 @@ import { Button } from "@/app/_components/ui/button";
 import { createStripeCheckout } from "@/app/_lib/create-stripe-checkout";
 import { getStripe } from "@/app/_lib/stripe-client";
 import { LoaderIcon } from "lucide-react";
+import Link from "next/link";
 import { useState } from "react";
 
-const SubscriptionButton = () => {
+interface SubscriptionButtonParams {
+  hasSubscription: string;
+  userMail?: string;
+}
+
+const SubscriptionButton = ({
+  hasSubscription,
+  userMail,
+}: SubscriptionButtonParams) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleAcquirePlanClick = async () => {
@@ -24,8 +33,24 @@ const SubscriptionButton = () => {
       setIsLoading(false);
     }
   };
-  return (
-    <>
+  if (hasSubscription === "SUB_OK") {
+    return (
+      <Button
+        className="w-full gap-2 rounded-full font-bold"
+        variant="link"
+        asChild
+      >
+        <Link
+          href={`${process.env.NEXT_PUBLIC_STRIPE_CUSTOMER_PORTAL_URL as string}?prefilled_email=${userMail}`}
+        >
+          Gerenciar Plano
+        </Link>
+      </Button>
+    );
+  }
+
+  if (hasSubscription === "NOTHING_OK") {
+    return (
       <Button
         className="w-full gap-2 rounded-full font-bold"
         onClick={handleAcquirePlanClick}
@@ -33,8 +58,8 @@ const SubscriptionButton = () => {
       >
         {isLoading && <LoaderIcon className="animate-spin" />}Adquirir plano
       </Button>
-    </>
-  );
+    );
+  }
 };
 
 export default SubscriptionButton;

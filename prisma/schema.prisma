@@ -63,6 +63,7 @@ model User {
   subscriptionId               String?
   subscriptionPriceId          String?
   subscriptionCurrentPeriodEnd DateTime?
+  plan                         String?
   sessions                     Session[]
   accounts                     Account[]
   Payment                      Payment[]

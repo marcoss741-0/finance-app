@@ -3,12 +3,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { headers } from "next/headers";
 import Stripe from "stripe";
-import {
-  handleCheckoutSessionCompleted,
-  handleInvoicePaymentSucceeded,
-  handleSubscriptionCreated,
-} from "./stripe-events";
-import { setTimeout } from "timers/promises";
+import { handleCheckoutSessionCompleted } from "@/app/_actions/stripe-events";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
   apiVersion: "2025-04-30.basil",
@@ -29,27 +24,12 @@ export async function POST(req: NextRequest) {
   );
 
   switch (event.type) {
-    case "checkout.session.completed":
+    case "checkout.session.completed": {
       await handleCheckoutSessionCompleted(
         event.data.object as Stripe.Checkout.Session,
       );
       break;
-    case "invoice.payment_succeeded":
-      setTimeout(
-        2000,
-        await handleInvoicePaymentSucceeded(
-          event.data.object as Stripe.Invoice,
-        ),
-      );
-      break;
-    case "customer.subscription.created":
-      setTimeout(
-        2500,
-        await handleSubscriptionCreated(
-          event.data.object as Stripe.Subscription,
-        ),
-      );
-      break;
+    }
   }
 
   return NextResponse.json({ received: true });

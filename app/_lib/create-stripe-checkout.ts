@@ -28,6 +28,7 @@ export const createStripeCheckout = async () => {
     cancel_url: "http://localhost:3000",
     metadata: {
       better_userID: userId,
+      plan: "PRO_PLAN",
     },
     line_items: [
       {
