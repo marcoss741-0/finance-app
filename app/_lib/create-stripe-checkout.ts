@@ -12,10 +12,10 @@ export const createStripeCheckout = async () => {
   const userId = userSession?.user.id;
 
   if (!userId) {
-    return NextResponse.json({
+    return {
       success: false,
       message: "Usuario não esta logado!",
-    });
+    };
   }
 
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
