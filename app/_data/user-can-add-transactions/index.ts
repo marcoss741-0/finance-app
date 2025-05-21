@@ -18,8 +18,6 @@ export const UserCanAddTransactions = async () => {
     },
   });
 
-  console.log("verifyPlan", verifyPlan?.plan);
-
   if (verifyPlan && verifyPlan?.plan === ("PRO_PLAN" as string)) {
     return true;
   }

@@ -17,8 +17,6 @@ const Transactions = async () => {
 
   const userCanAdd = await UserCanAddTransactions();
 
-  console.log("UserCanAddTransactions", userCanAdd);
-
   return (
     <>
       <NavBar user={session.user} />
