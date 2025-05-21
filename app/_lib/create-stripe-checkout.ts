@@ -24,8 +24,8 @@ export const createStripeCheckout = async () => {
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ["card"],
     mode: "subscription",
-    success_url: "http://localhost:3000/subscriptions",
-    cancel_url: "http://localhost:3000",
+    success_url: process.env.APP_URL,
+    cancel_url: process.env.APP_URL,
     metadata: {
       better_userID: userId,
       plan: "PRO_PLAN",
