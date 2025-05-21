@@ -3,7 +3,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { headers } from "next/headers";
 import Stripe from "stripe";
-import { handleCheckoutSessionCompleted } from "@/app/_actions/stripe-events";
+import {
+  handleCheckoutSessionCompleted,
+  handleSubscriptionDeleted,
+} from "@/app/_actions/stripe-events";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
   apiVersion: "2025-04-30.basil",
@@ -28,6 +31,10 @@ export async function POST(req: NextRequest) {
       await handleCheckoutSessionCompleted(
         event.data.object as Stripe.Checkout.Session,
       );
+      break;
+    }
+    case "customer.subscription.deleted": {
+      await handleSubscriptionDeleted(event.data.object as Stripe.Subscription);
       break;
     }
   }
