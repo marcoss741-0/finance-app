@@ -8,6 +8,8 @@ import { isMatch } from "date-fns";
 import TransactionPieChart from "./_components/transactions-pie-chart";
 import ExpensesPerCategory from "./_components/expenses-per-category";
 import LastTransactions from "./_components/last-transactions";
+import AiReportButton from "./_components/ai-report-button";
+import { prisma } from "../_lib/prisma";
 
 interface HomeProps {
   searchParams: {
@@ -56,6 +58,26 @@ export default async function Home({ searchParams: { month } }: HomeProps) {
     return "Mês inválido";
   }
 
+  const user = await prisma.user.findFirst({
+    where: {
+      id: session.user.id,
+      plan: "PRO_PLAN",
+    },
+    select: {
+      plan: true,
+    },
+  });
+
+  let hasPlan: string = "NONE";
+
+  if (user?.plan === undefined || null || "NONE") {
+    hasPlan = "NOTHING_OK";
+  }
+
+  if (user?.plan === "PRO_PLAN") {
+    hasPlan = "SUB_OK";
+  }
+
   return (
     <>
       <NavBar user={session.user} />
@@ -63,7 +85,10 @@ export default async function Home({ searchParams: { month } }: HomeProps) {
       <div className="flex h-full flex-col space-y-6 overflow-hidden p-6">
         <div className="flex justify-between">
           <h1 className="text-2xl font-bold">Dashboard</h1>
-          <TimeSelect />
+          <div className="flex items-center gap-4">
+            <AiReportButton month={month} hasPremiumPlan={hasPlan} />
+            <TimeSelect />
+          </div>
         </div>
 
         <div className="grid h-full grid-cols-[2fr,1fr] gap-6 overflow-hidden">
