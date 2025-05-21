@@ -26,6 +26,7 @@ export async function handleCheckoutSessionCompleted(
         data: {
           stripeCustomerId: session.customer as string,
           plan: session.metadata?.plan as string,
+          subscriptionStatus: session.metadata?.status as string,
         },
       });
     }
@@ -75,6 +76,7 @@ export async function handleSubscriptionDeleted(
       data: {
         stripeCustomerId: null,
         plan: null,
+        subscriptionStatus: "inactive",
       },
     });
 

@@ -29,6 +29,7 @@ export const createStripeCheckout = async () => {
     metadata: {
       better_userID: userId,
       plan: "PRO_PLAN",
+      status: "active",
     },
     line_items: [
       {

@@ -30,8 +30,11 @@ const AiReportButton = ({ hasPremiumPlan, month }: AiReportButtonProps) => {
     try {
       setReportIsLoading(true);
       const aiReport = await generateAiReport(month as string);
-      console.log(aiReport);
 
+      if (aiReport.success === false) {
+        setReport(aiReport.message as string);
+        return;
+      }
       setReport(aiReport.text as string);
     } catch (error) {
       console.log(error);
@@ -78,7 +81,7 @@ const AiReportButton = ({ hasPremiumPlan, month }: AiReportButtonProps) => {
   };
   return (
     <>
-      <Dialog>
+      <Dialog onOpenChange={(open) => !open && setReport(null)}>
         <DialogTrigger asChild>
           <Button variant="ghost">
             Relatório IA
@@ -146,7 +149,7 @@ const AiReportButton = ({ hasPremiumPlan, month }: AiReportButtonProps) => {
                   <Button variant="ghost">Cancelar</Button>
                 </DialogClose>
                 <Button variant="link" asChild>
-                  <Link href="/subscription">Assinar plano premium</Link>
+                  <Link href="/subscriptions">Assinar plano premium</Link>
                 </Button>
               </DialogFooter>
             </>

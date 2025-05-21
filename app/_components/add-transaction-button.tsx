@@ -7,9 +7,13 @@ import UpsertDialogTransaction from "./upsert-dialog-transaction";
 
 interface AddTransactionsParams {
   userId?: string;
+  userCanAddTransaction?: boolean;
 }
 
-const AddTransactionsButton = ({ userId }: AddTransactionsParams) => {
+const AddTransactionsButton = ({
+  userId,
+  userCanAddTransaction,
+}: AddTransactionsParams) => {
   const [dialogIsOpen, setDialoIsOpen] = useState(false);
 
   return (
@@ -18,6 +22,7 @@ const AddTransactionsButton = ({ userId }: AddTransactionsParams) => {
         variant="default"
         className="gap-2 rounded-full text-[14px] font-semibold"
         onClick={() => setDialoIsOpen(true)}
+        disabled={!userCanAddTransaction}
       >
         Adicionar transação <ArrowUpDown />
       </Button>

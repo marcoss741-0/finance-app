@@ -9,6 +9,7 @@ interface summaryCardProps {
   icon: React.ReactNode;
   amount: number;
   size?: "small" | "large";
+  userCanAddTransaction?: boolean;
 }
 
 const SummaryCard = ({
@@ -16,6 +17,7 @@ const SummaryCard = ({
   title,
   amount,
   size = "small",
+  userCanAddTransaction,
 }: summaryCardProps) => {
   return (
     <>
@@ -35,7 +37,11 @@ const SummaryCard = ({
             {formatCurrency(Number(amount))}
           </p>
 
-          {size === "large" && <AddTransactionsButton />}
+          {size === "large" && (
+            <AddTransactionsButton
+              userCanAddTransaction={userCanAddTransaction}
+            />
+          )}
         </CardContent>
       </Card>
     </>

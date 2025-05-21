@@ -7,6 +7,7 @@ import { CheckIcon, XIcon } from "lucide-react";
 import { Badge } from "../_components/ui/badge";
 import SubscriptionButton from "./_components/subscription-button";
 import { prisma } from "../_lib/prisma";
+import { UserCountTransaction } from "../_data/user-count-transactions";
 
 const Subscriptions = async () => {
   const session = await auth.api.getSession({
@@ -37,6 +38,8 @@ const Subscriptions = async () => {
     hasPlan = "SUB_OK";
   }
 
+  const userTransactions = await UserCountTransaction();
+
   return (
     <>
       <NavBar user={session.user} />
@@ -66,7 +69,7 @@ const Subscriptions = async () => {
             <CardContent className="space-y-6 py-8">
               <div className="flex items-center gap-2">
                 <CheckIcon className="text-primary" />
-                <p>Apenas 10 transações por mês ({6}/10)</p>
+                <p>Apenas 10 transações por mês ({userTransactions}/10)</p>
               </div>
               <div className="flex items-center gap-2">
                 <XIcon />

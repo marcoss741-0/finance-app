@@ -15,9 +15,14 @@ export type ResumeData = {
 interface SummaryCardParams {
   month?: string;
   userID?: string;
+  userCanAddTransaction?: boolean;
 }
 
-const SummaryCards = ({ month, userID }: SummaryCardParams) => {
+const SummaryCards = ({
+  month,
+  userID,
+  userCanAddTransaction,
+}: SummaryCardParams) => {
   const { depositTotal, expenseTotal, balance, investmentTotal, isLoading } =
     useTransactionData(month, userID);
 
@@ -32,6 +37,7 @@ const SummaryCards = ({ month, userID }: SummaryCardParams) => {
             title="Saldo"
             amount={balance ?? 0}
             size="large"
+            userCanAddTransaction={userCanAddTransaction}
           />
 
           <div className="grid grid-cols-3 gap-6">

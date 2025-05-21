@@ -10,6 +10,7 @@ import ExpensesPerCategory from "./_components/expenses-per-category";
 import LastTransactions from "./_components/last-transactions";
 import AiReportButton from "./_components/ai-report-button";
 import { prisma } from "../_lib/prisma";
+import { UserCanAddTransactions } from "../_data/user-can-add-transactions";
 
 interface HomeProps {
   searchParams: {
@@ -78,6 +79,8 @@ export default async function Home({ searchParams: { month } }: HomeProps) {
     hasPlan = "SUB_OK";
   }
 
+  const userCanAdd = await UserCanAddTransactions();
+
   return (
     <>
       <NavBar user={session.user} />
@@ -93,7 +96,11 @@ export default async function Home({ searchParams: { month } }: HomeProps) {
 
         <div className="grid h-full grid-cols-[2fr,1fr] gap-6 overflow-hidden">
           <div className="flex flex-col gap-6 overflow-hidden">
-            <SummaryCards month={month} userID={session.user.id} />
+            <SummaryCards
+              month={month}
+              userID={session.user.id}
+              userCanAddTransaction={userCanAdd}
+            />
             <div className="grid h-full grid-cols-3 grid-rows-1 gap-6 overflow-hidden">
               <TransactionPieChart
                 month={month}
