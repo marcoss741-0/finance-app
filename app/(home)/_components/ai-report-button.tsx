@@ -15,7 +15,7 @@ import { ScrollArea } from "@/app/_components/ui/scroll-area";
 import { BotIcon, Loader2Icon } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
-import ReactMarkdown from "react-markdown";
+import Markdown from "react-markdown";
 import { generateAiReport } from "../_actions/ai-report";
 
 interface AiReportButtonProps {
@@ -43,42 +43,6 @@ const AiReportButton = ({ hasPremiumPlan, month }: AiReportButtonProps) => {
     }
   };
 
-  const sectionTitleStyle = {
-    color: "#0056b3",
-    borderBottom: "1px solid #333",
-    paddingBottom: "8px",
-    marginBottom: "15px",
-    display: "flex", // Para alinhar com emojis
-    alignItems: "center",
-  };
-
-  const highlightStyle = {
-    fontWeight: "bold",
-    color: "#56b22e", // Verde para valores positivos/importantes
-  };
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const negativeHighlightStyle = {
-    fontWeight: "bold",
-    color: "#dc3545",
-  };
-
-  const tableStyle = {
-    width: "100%",
-    borderCollapse: "collapse" as const,
-    margin: "20px 0",
-  };
-
-  const thTdStyle = {
-    border: "1px solid #ddd",
-    padding: "10px",
-    textAlign: "left" as const,
-  };
-
-  const listStyle = {
-    listStyleType: "disc",
-    marginLeft: "20px",
-  };
   return (
     <>
       <Dialog onOpenChange={(open) => !open && setReport(null)}>
@@ -99,29 +63,7 @@ const AiReportButton = ({ hasPremiumPlan, month }: AiReportButtonProps) => {
                 </DialogDescription>
               </DialogHeader>
               <ScrollArea className="prose prose-h3:text-white prose-h4:text-white prose-strong:text-white max-h-[450px] p-5 text-white">
-                <ReactMarkdown
-                  components={{
-                    h1: ({ ...props }) => (
-                      <h1 style={sectionTitleStyle} {...props} />
-                    ),
-                    h2: ({ ...props }) => (
-                      <h2 style={sectionTitleStyle} {...props} />
-                    ),
-                    p: ({ ...props }) => <p {...props} />,
-                    strong: ({ ...props }) => (
-                      <strong style={highlightStyle} {...props} />
-                    ), // Negrito para destacar valores positivos
-                    table: ({ ...props }) => (
-                      <table style={tableStyle} {...props} />
-                    ),
-                    th: ({ ...props }) => <th style={thTdStyle} {...props} />,
-                    td: ({ ...props }) => <td style={thTdStyle} {...props} />,
-                    ul: ({ ...props }) => <ul style={listStyle} {...props} />,
-                    ol: ({ ...props }) => <ol style={listStyle} {...props} />,
-                  }}
-                >
-                  {report as string}
-                </ReactMarkdown>
+                <Markdown>{report as string}</Markdown>
               </ScrollArea>
               <DialogFooter>
                 <DialogClose asChild>
