@@ -25,12 +25,6 @@ const fetcher = async (url: string) => {
   return response.json();
 };
 
-/**
- * Hook personalizado para buscar dados de transações usando SWR
- * @param month Mês para filtrar as transações (opcional)
- * @param userID ID do usuário para filtrar as transações (opcional)
- * @returns Objeto com dados, estado de loading e erro
- */
 export function useTransactionData(month?: string, userID?: string) {
   const { data, error, isLoading, mutate } = useSWR<TransactionData[]>(
     `/api/transactions/get-resume?month=${month || ""}&userID=${userID || ""}`,
